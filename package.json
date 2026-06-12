@@ -1,0 +1,125 @@
+{
+  "name": "command-deck",
+  "displayName": "Command Deck",
+  "description": "Run workspace shell commands from a dedicated VS Code panel, command palette, or shortcut.",
+  "version": "0.0.1",
+  "publisher": "local-dev",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:commandDeck.commands",
+    "onCommand:commandDeck.runSelected",
+    "onCommand:commandDeck.addCommand",
+    "onCommand:commandDeck.refreshCommands",
+    "onCommand:commandDeck.runCommand"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "commandDeck.runSelected",
+        "title": "Command Deck: Run Command"
+      },
+      {
+        "command": "commandDeck.addCommand",
+        "title": "Command Deck: Add Command",
+        "icon": "$(add)"
+      },
+      {
+        "command": "commandDeck.refreshCommands",
+        "title": "Command Deck: Refresh Commands",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "commandDeck.runCommand",
+        "title": "Command Deck: Run Saved Command"
+      }
+    ],
+    "configuration": {
+      "title": "Command Deck",
+      "properties": {
+        "commandDeck.commands": {
+          "type": "array",
+          "default": [],
+          "description": "Workspace commands shown in Command Deck.",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "command"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Display name for the command."
+              },
+              "command": {
+                "type": "string",
+                "description": "Shell command to run in the Command Deck terminal."
+              }
+            }
+          }
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "commandDeck.runSelected",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r",
+        "when": "editorTextFocus || terminalFocus || !inputFocus"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "commandDeck.runCommand",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "commandDeck.addCommand",
+          "when": "view == commandDeck.commands",
+          "group": "navigation"
+        },
+        {
+          "command": "commandDeck.refreshCommands",
+          "when": "view == commandDeck.commands",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "commandDeck",
+          "title": "Command Deck",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "commandDeck": [
+        {
+          "id": "commandDeck.commands",
+          "name": "Commands"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.8",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.2"
+  }
+}
